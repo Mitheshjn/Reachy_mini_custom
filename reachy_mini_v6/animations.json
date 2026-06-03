@@ -1,0 +1,789 @@
+{
+    "built_in": {
+        "Boot Up": [
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 135,
+                "Roll": -1,
+                "Pitch": -17,
+                "Yaw": 0,
+                "Left Eye": 478,
+                "Right Eye": 503,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 135,
+                "Roll": -1,
+                "Pitch": -17,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 155,
+                "Roll": -1,
+                "Pitch": -17,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            }
+        ],
+        "Shutdown": [
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 135,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 135,
+                "Roll": -1,
+                "Pitch": -13,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 135,
+                "Roll": -1,
+                "Pitch": -13,
+                "Yaw": 0,
+                "Left Eye": 542,
+                "Right Eye": 567,
+                "duration": 1,
+                "audio": ""
+            }
+        ],
+        "Yes / Nod": [
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 0.4,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 3,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 0.4,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 8,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 0.4,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 1,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 0.4,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 0.4,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 0.4,
+                "audio": ""
+            }
+        ],
+        "No / Shake": [
+            {
+                "Yaw": -20,
+                "duration": 0.3
+            },
+            {
+                "Yaw": 20,
+                "duration": 0.3
+            },
+            {
+                "Yaw": -15,
+                "duration": 0.3
+            },
+            {
+                "Yaw": 0,
+                "duration": 0.3
+            }
+        ],
+        "Curious": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": -7.5,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": -7.5,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 525.0,
+                "Both Eye": 500.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": -7.5,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": -7.5,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 7.5,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 7.5,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1
+            }
+        ],
+        "Bottom left": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            }
+        ],
+        "Left": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            }
+        ],
+        "Top left": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Top": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Top right": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Right": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Bottom right": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Bottom": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Center": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 0.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 1.0
+            }
+        ],
+        "Square": [
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": -25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.7
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": -20.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": 0.0,
+                "Z (Heave)": 155.0,
+                "Roll": 0.0,
+                "Pitch": 20.0,
+                "Yaw": 25.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            },
+            {
+                "X (Sway)": 0.0,
+                "Y (Surge)": -3.0,
+                "Z (Heave)": 148.0,
+                "Roll": -1.5,
+                "Pitch": 9.0,
+                "Yaw": 0.0,
+                "Left Eye": 200.0,
+                "Right Eye": 225.0,
+                "Both Eye": 200.0,
+                "duration": 0.5
+            }
+        ],
+        "left_turn": [
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 346,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -1,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            }
+        ],
+        "new boot": [
+            {
+                "Base": 500,
+                "Left Eye": 200,
+                "Pitch": 9,
+                "Right Eye": 225,
+                "Roll": -1,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Yaw": 0,
+                "Z (Heave)": 148,
+                "audio": "",
+                "duration": 1
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": -10,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": "hello !!"
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": 11,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": "I am q bot !!"
+            },
+            {
+                "Base": 500,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Z (Heave)": 148,
+                "Roll": 0,
+                "Pitch": 9,
+                "Yaw": 0,
+                "Left Eye": 200,
+                "Right Eye": 225,
+                "duration": 1,
+                "audio": ""
+            }
+        ]
+    },
+    "custom": {
+        "new test": [
+            {
+                "Base": 363,
+                "Left Eye": 200,
+                "Pitch": 9,
+                "Right Eye": 225,
+                "Roll": -1,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Yaw": 0,
+                "Z (Heave)": 148,
+                "audio": "",
+                "duration": 1
+            },
+            {
+                "Base": 501,
+                "Left Eye": 200,
+                "Pitch": 9,
+                "Right Eye": 225,
+                "Roll": -1,
+                "X (Sway)": 0,
+                "Y (Surge)": -3,
+                "Yaw": 0,
+                "Z (Heave)": 148,
+                "audio": "",
+                "duration": 1
+            }
+        ]
+    }
+}

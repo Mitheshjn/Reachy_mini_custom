@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Reachy Fleet OS v6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style> 
+        body { background-color: #121212; } 
+        .cam-feed { width: 100%; border-radius: 12px; border: 2px solid #333; } 
+        .step-list { max-height: 200px; overflow-y: auto; }
+        .tuning-slider { height: 1.5rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark border-bottom border-secondary mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand text-primary fw-bold" href="#">🤖 Reachy Fleet v6</a>
+        <div class="d-flex w-50">
+            <input type="text" id="target_ip" class="form-control me-2" placeholder="Robot IP (e.g., 192.168.1.50)">
+            <button class="btn btn-success fw-bold px-4" onclick="connectRobot()">Connect</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- LEFT CONTROL COLUMN -->
+        <div class="col-md-5">
+            <img src="/video_feed" class="cam-feed mb-3" alt="Video Feed">
+            <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-warning flex-fill" onclick="post('/api/go_home', {})">🏠 Go Home</button>
+                <button class="btn btn-info flex-fill" id="blinkBtn" onclick="toggleBlink()">👁️ Blink ON</button>
+            </div>
+            <button class="btn btn-secondary w-100 mb-3" id="vidBtn" onclick="toggleVid()">📹 Toggle Video</button>
+            
+            <div class="card bg-dark border-secondary mt-3">
+                <div class="card-body">
+                    <h5>Installed Apps & Modes</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for app in apps %}
+                            <button id="app_{{app}}" class="btn btn-sm {% if app in running_apps %}btn-success{% else %}btn-outline-light{% endif %}" onclick="toggleApp('{{app}}')">🚀 {{ app }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT TAB PANEL -->
+        <div class="col-md-7">
+            <ul class="nav nav-pills mb-3" id="pills-tab">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#chat">Chat</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#editor">Poses & Editor</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#fleet">Fleet Calibration</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#settings">Settings</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- AI CHAT TAB -->
+                <div class="tab-pane fade show active" id="chat">
+                    <div class="card bg-dark text-center py-5">
+                        <div class="card-body">
+                            <h4 id="session_title">Hands-Free AI Ready</h4>
+                            <p class="text-muted" id="session_desc">Say "{{config.wake_word}}" near the Mic, or click to talk.</p>
+                            <button id="mic_glow_button" class="btn btn-lg btn-danger rounded-circle mb-3" style="width: 80px; height: 80px; font-size: 30px; transition: all 0.3s ease-in-out;" onclick="forceListen()">🎤</button>
+                            <p id="chatStatus" class="text-info fw-bold">Ready</p>
+                            <div class="input-group mt-4 px-5">
+                                <input type="text" id="manualText" class="form-control" placeholder="Type command...">
+                                <button class="btn btn-primary" onclick="sendChat(document.getElementById('manualText').value)">Send</button>
+                            </div>
+                            <div id="chatReply" class="mt-4 text-warning fw-bold"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POSES & STEP CREATOR TAB -->
+                <div class="tab-pane fade" id="editor">
+                    <!-- Standard Sliders -->
+                    <div class="card bg-dark mb-2"><div class="card-body row">
+                        <div class="col-6">
+                            <label>Base <span id="v_base">500</span></label><input type="range" class="form-range p-slider" id="base" min="0" max="1000" value="500">
+                            <label>X <span id="v_x">0</span></label><input type="range" class="form-range p-slider" id="x" min="-18" max="18" value="0">
+                            <label>Y <span id="v_y">0</span></label><input type="range" class="form-range p-slider" id="y" min="-18" max="18" value="0">
+                            <label>Z <span id="v_z">148</span></label><input type="range" class="form-range p-slider" id="z" min="135" max="167" value="148">
+                        </div>
+                        <div class="col-6">
+                            <label>Roll <span id="v_roll">0</span></label><input type="range" class="form-range p-slider" id="roll" min="-20" max="20" value="0">
+                            <label>Pitch <span id="v_pitch">0</span></label><input type="range" class="form-range p-slider" id="pitch" min="-17" max="27" value="0">
+                            <label>Yaw <span id="v_yaw">0</span></label><input type="range" class="form-range p-slider" id="yaw" min="-25" max="25" value="0">
+                            
+                            <label class="text-warning fw-bold">Both Eyes <span id="v_both_eyes">200</span></label>
+                            <input type="range" class="form-range p-slider" id="both_eyes" min="100" max="900" value="200">
+                            <div class="d-flex gap-2">
+                                <div class="w-50"><small>Left Eye (<span id="v_left_eye">200</span>)</small><input type="range" class="form-range p-slider" id="left_eye" min="100" max="900" value="200"></div>
+                                <div class="w-50"><small>Right Eye (<span id="v_right_eye">225</span>)</small><input type="range" class="form-range p-slider" id="right_eye" min="100" max="900" value="225"></div>
+                            </div>
+                        </div>
+                    </div></div>
+
+                    <!-- Step Creator Panel -->
+                    <div class="card border-info bg-dark mb-2">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-3"><input type="number" id="step_dur" class="form-control" value="1.0" step="0.1" title="Duration"></div>
+                                <div class="col-6"><input type="text" id="step_aud" class="form-control" placeholder="TTS audio line on this step"></div>
+                                <div class="col-3"><button class="btn btn-info w-100" onclick="addStep()">+ Add Step</button></div>
+                            </div>
+                            <ul id="step_list" class="list-group step-list mb-3 text-dark"></ul>
+                            
+                            <div class="input-group mb-2">
+                                <input type="text" id="anim_name" class="form-control" placeholder="Animation Name">
+                                <select id="anim_category" class="form-select" style="max-width: 140px;">
+                                    <option value="custom" selected>Custom</option>
+                                    <option value="built_in">Built-in</option>
+                                </select>
+                                <button class="btn btn-success" onclick="saveAnim()">Save</button>
+                                <button class="btn btn-warning" onclick="renameAnim()">Rename</button>
+                                <button class="btn btn-danger" onclick="deleteAnim()">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown Loaders (Separated Categories) -->
+                    <div class="card bg-dark">
+                        <div class="card-body">
+                            <label class="form-label text-info fw-bold">Load Animation Sequence</label>
+                            <div class="input-group">
+                                <select id="anim_dropdown" class="form-select">
+                                    <option value="" disabled selected>-- Choose Sequence --</option>
+                                    <optgroup label="Default / Emotion Animations" id="drop_built_in">
+                                    </optgroup>
+                                    <optgroup label="User Created Custom Animations" id="drop_custom">
+                                    </optgroup>
+                                </select>
+                                <button class="btn btn-primary" onclick="playSelectedDropdown()">▶ Play</button>
+                                <button class="btn btn-outline-secondary" onclick="loadDropdownToEditor()">✏️ Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLEET CALIBRATION TAB -->
+                <div class="tab-pane fade" id="fleet">
+                    <div class="card border-warning bg-dark mb-3">
+                        <div class="card-header bg-warning text-dark fw-bold">1. Find Neutral Centers (0 - 1000)</div>
+                        <div class="card-body">
+                            <p class="small text-muted">Directly command raw values to align the robot physically. Saving registers the neutral state.</p>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="small text-info">Leg 1 (<span id="v_s1">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s1" min="0" max="1000" oninput="document.getElementById('v_s1').innerText=this.value; directServo(1, this.value)">
+                                    <label class="small text-info">Leg 2 (<span id="v_s2">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s2" min="0" max="1000" oninput="document.getElementById('v_s2').innerText=this.value; directServo(2, this.value)">
+                                    <label class="small text-info">Leg 3 (<span id="v_s3">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s3" min="0" max="1000" oninput="document.getElementById('v_s3').innerText=this.value; directServo(3, this.value)">
+                                    <label class="small text-info">Leg 4 (<span id="v_s4">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s4" min="0" max="1000" oninput="document.getElementById('v_s4').innerText=this.value; directServo(4, this.value)">
+                                    <label class="small text-info">Leg 5 (<span id="v_s5">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s5" min="0" max="1000" oninput="document.getElementById('v_s5').innerText=this.value; directServo(5, this.value)">
+                                    <label class="small text-info">Leg 6 (<span id="v_s6">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s6" min="0" max="1000" oninput="document.getElementById('v_s6').innerText=this.value; directServo(6, this.value)">
+                                </div>
+                                <div class="col-6 border-start border-secondary">
+                                    <label class="small text-danger">Base 7 (<span id="v_s7">500</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s7" min="0" max="1000" oninput="document.getElementById('v_s7').innerText=this.value; directServo(7, this.value)">
+                                    <label class="small text-success">Left Eye 9 (<span id="v_s9">200</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s9" min="0" max="1000" oninput="document.getElementById('v_s9').innerText=this.value; directServo(9, this.value)">
+                                    <label class="small text-success">Right Eye 10 (<span id="v_s10">225</span>)</label>
+                                    <input type="range" class="form-range tuning-slider" id="s10" min="0" max="1000" oninput="document.getElementById('v_s10').innerText=this.value; directServo(10, this.value)">
+                                    <button class="btn btn-warning w-100 mt-4 fw-bold" onclick="saveCalibrationCenters()">Save Hardware Centers</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-info bg-dark">
+                        <div class="card-header bg-info text-dark fw-bold">2. Limits & Inversion Matrix</div>
+                        <div class="card-body">
+                            <table class="table table-dark table-sm">
+                                <thead><tr><th>Axis</th><th>Min</th><th>Max</th><th>Invert?</th></tr></thead>
+                                <tbody>
+                                    <tr><td>X</td><td><input type="number" id="l_x_min" class="form-control form-control-sm"></td><td><input type="number" id="l_x_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_x" class="form-check-input"></td></tr>
+                                    <tr><td>Y</td><td><input type="number" id="l_y_min" class="form-control form-control-sm"></td><td><input type="number" id="l_y_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_y" class="form-check-input"></td></tr>
+                                    <tr><td>Z</td><td><input type="number" id="l_z_min" class="form-control form-control-sm"></td><td><input type="number" id="l_z_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_z" class="form-check-input"></td></tr>
+                                    <tr><td>Roll</td><td><input type="number" id="l_r_min" class="form-control form-control-sm"></td><td><input type="number" id="l_r_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_r" class="form-check-input"></td></tr>
+                                    <tr><td>Pitch</td><td><input type="number" id="l_p_min" class="form-control form-control-sm"></td><td><input type="number" id="l_p_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_p" class="form-check-input"></td></tr>
+                                    <tr><td>Yaw</td><td><input type="number" id="l_yw_min" class="form-control form-control-sm"></td><td><input type="number" id="l_yw_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_yw" class="form-check-input"></td></tr>
+                                    <tr><td>Base</td><td><input type="number" id="l_b_min" class="form-control form-control-sm"></td><td><input type="number" id="l_b_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_b" class="form-check-input"></td></tr>
+                                    <tr><td>Left Eye</td><td><input type="number" id="l_le_min" class="form-control form-control-sm"></td><td><input type="number" id="l_le_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_le" class="form-check-input"></td></tr>
+                                    <tr><td>Right Eye</td><td><input type="number" id="l_re_min" class="form-control form-control-sm"></td><td><input type="number" id="l_re_max" class="form-control form-control-sm"></td><td><input type="checkbox" id="inv_re" class="form-check-input"></td></tr>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-info w-100 fw-bold" onclick="saveCalibrationLimits()">Update Limits & Inversions</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS TAB -->
+                <div class="tab-pane fade" id="settings">
+                    <div class="card bg-dark border-secondary mb-3">
+                        <div class="card-body">
+                            <h5 class="text-warning">Audio Routing & Volume</h5>
+                            <label>Active Microphone Source</label>
+                            <select id="mic_source" class="form-select mb-3" onchange="handleAudioChange()">
+                                <option value="pi" {% if config.mic_source == 'pi' %}selected{% endif %}>Pi Internal Mic (Default)</option>
+                                <option value="esp32" {% if config.mic_source == 'esp32' %}selected{% endif %}>ESP32 Wireless Mic (Port 5004)</option>
+                                <option value="web" {% if config.mic_source == 'web' %}selected{% endif %}>Web / Mobile Device Mic</option>
+                            </select>
+                            <label>Mic Input Volume: <span id="v_mic">{{config.mic_volume}}</span>x Boost</label>
+                            <input type="range" id="mic_volume" class="form-range mb-3" min="0" max="10" step="1" value="{{config.mic_volume}}" oninput="document.getElementById('v_mic').innerText=this.value; handleAudioChange()">
+                            <label>Speaker Output Volume: <span id="v_spk">{{config.speaker_volume}}</span></label>
+                            <input type="range" id="speaker_volume" class="form-range mb-3" min="0" max="1" step="0.01" value="{{config.speaker_volume}}" oninput="document.getElementById('v_spk').innerText=this.value; handleAudioChange()">
+                        </div>
+                    </div>
+
+                    <div class="card bg-dark border-secondary">
+                        <div class="card-body">
+                            <h5>Voice Customization</h5>
+                            <label>Wake Words (comma-separated)</label>
+                            <input type="text" id="wake_word" class="form-control mb-2" value="{{config.wake_word}}">
+                            <label>Piper Voice Model (.onnx)</label>
+                            <input type="text" id="piper_model" class="form-control mb-4" value="{{config.piper_model}}">
+
+                            <h5>AI System Prompt</h5>
+                            <label>Provider API URL</label>
+                            <input type="text" id="ai_url" class="form-control mb-2" value="{{config.ai_url}}">
+                            <label>Model Name</label>
+                            <input type="text" id="ai_model" class="form-control mb-2" value="{{config.ai_model}}">
+                            <label>System Prompt / Personality</label>
+                            <textarea id="sys_prompt" class="form-control mb-3" rows="3">{{config.system_prompt}}</textarea>
+                            <button class="btn btn-success w-100" onclick="saveSettings()">Save Configuration</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let isDragging = false, vidState = true, blinkState = true, currentCal = null;
+    let steps = [];
+
+    let webMicStream = null, webAudioCtx = null, webProcessor = null, wsMic = null;
+
+    if(localStorage.getItem('last_ip')) { document.getElementById('target_ip').value = localStorage.getItem('last_ip'); }
+
+    function connectRobot() {
+        let ip = document.getElementById('target_ip').value;
+        if(!ip) return alert("Enter Robot IP!");
+        localStorage.setItem('last_ip', ip);
+        post('/api/connect', {ip: ip}).then(r=>r.json()).then(data => {
+            alert(data.status);
+            loadCalibrationUI(data.calibration);
+            loadAnimationsDropdown();
+            
+            if (document.getElementById('mic_source').value === 'web') {
+                startWebMic();
+            }
+        });
+    }
+
+    function startWebMic() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("⚠️ Web Mic streaming requires an HTTPS secure session!");
+            return;
+        }
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            webMicStream = stream;
+            webAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            let source = webAudioCtx.createMediaStreamSource(stream);
+            webProcessor = webAudioCtx.createScriptProcessor(2048, 1, 1);
+            
+            let protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+            let wsUrl = protocol + window.location.host + "/web_mic";
+            wsMic = new WebSocket(wsUrl);
+            
+            webProcessor.onaudioprocess = function(e) {
+                if (document.getElementById('mic_source').value !== 'web') return;
+                let inputData = e.inputBuffer.getChannelData(0);
+                let pcm16 = new Int16Array(inputData.length);
+                for (let i = 0; i < inputData.length; i++) {
+                    pcm16[i] = Math.max(-1, Math.min(1, inputData[i])) * 32767;
+                }
+                if (wsMic.readyState === WebSocket.OPEN) {
+                    wsMic.send(pcm16.buffer);
+                }
+            };
+            source.connect(webProcessor);
+            webProcessor.connect(webAudioCtx.destination);
+            console.log("🎙️ Browser Audio Pipe Bound.");
+        }).catch(err => console.error("Audio initialization error: ", err));
+    }
+
+    function handleAudioChange() {
+        let src = document.getElementById('mic_source').value;
+        if (src === 'web' && !webMicStream) {
+            startWebMic();
+        }
+        saveSettings();
+    }
+
+    function directServo(id, pos) { post('/api/servo_direct', {id: id, pos: pos}); }
+
+    function loadCalibrationUI(cal) {
+        currentCal = cal;
+        
+        for(let i=1; i<=6; i++) {
+            document.getElementById('s'+i).value = cal.HOME_SC15[i-1];
+            document.getElementById('v_s'+i).innerText = cal.HOME_SC15[i-1];
+        }
+        document.getElementById('s7').value = cal.HOME_BASE || 500;
+        document.getElementById('v_s7').innerText = cal.HOME_BASE || 500;
+        document.getElementById('s9').value = cal.HOME_L_EYE || 200;
+        document.getElementById('v_s9').innerText = cal.HOME_L_EYE || 200;
+        document.getElementById('s10').value = cal.HOME_R_EYE || 225;
+        document.getElementById('v_s10').innerText = cal.HOME_R_EYE || 225;
+
+        const axes = ['x','y','z','r','p','yw','b','le','re'];
+        const p_axes = ['x','y','z','roll','pitch','yaw','base','left_eye','right_eye'];
+        axes.forEach((a, i) => {
+            let key = p_axes[i];
+            document.getElementById(`l_${a}_min`).value = cal.LIMITS[key][0];
+            document.getElementById(`l_${a}_max`).value = cal.LIMITS[key][1];
+            document.getElementById(`inv_${a}`).checked = cal.INVERT[key] === -1;
+        });
+
+        document.getElementById('z').min = cal.LIMITS.z[0];
+        document.getElementById('z').max = cal.LIMITS.z[1];
+        document.getElementById('z').value = cal.HOME_Z || 148.0; 
+        document.getElementById('v_z').innerText = Math.round(cal.HOME_Z || 148.0);
+
+        document.getElementById('left_eye').min = cal.LIMITS.left_eye[0];
+        document.getElementById('left_eye').max = cal.LIMITS.left_eye[1];
+        document.getElementById('left_eye').value = cal.HOME_L_EYE || 200.0; 
+        document.getElementById('v_left_eye').innerText = Math.round(cal.HOME_L_EYE || 200.0);
+
+        document.getElementById('right_eye').min = cal.LIMITS.right_eye[0];
+        document.getElementById('right_eye').max = cal.LIMITS.right_eye[1];
+        document.getElementById('right_eye').value = cal.HOME_R_EYE || 225.0; 
+        document.getElementById('v_right_eye').innerText = Math.round(cal.HOME_R_EYE || 225.0);
+
+        document.getElementById('base').min = cal.LIMITS.base[0];
+        document.getElementById('base').max = cal.LIMITS.base[1];
+        document.getElementById('base').value = cal.HOME_BASE || 500.0; 
+        document.getElementById('v_base').innerText = Math.round(cal.HOME_BASE || 500.0);
+        
+        document.getElementById('both_eyes').value = cal.HOME_L_EYE || 200.0;
+        document.getElementById('v_both_eyes').innerText = Math.round(cal.HOME_L_EYE || 200.0);
+    }
+
+    function saveCalibrationCenters() {
+        let arr = [];
+        for(let i=1; i<=6; i++) arr.push(parseInt(document.getElementById('s'+i).value));
+        post('/api/calibration/save', {
+            HOME_SC15: arr,
+            HOME_BASE: parseInt(document.getElementById('s7').value),
+            HOME_L_EYE: parseInt(document.getElementById('s9').value),
+            HOME_R_EYE: parseInt(document.getElementById('s10').value)
+        }).then(()=>alert("Saved Centers"));
+    }
+
+    function saveCalibrationLimits() {
+        let lims = currentCal.LIMITS;
+        let inv = currentCal.INVERT;
+        const map = [['x','x'], ['y','y'], ['z','z'], ['r','roll'], ['p','pitch'], ['yw','yaw'], ['b','base'], ['le','left_eye'], ['re','right_eye']];
+        map.forEach(m => {
+            lims[m[1]] = [ parseFloat(document.getElementById(`l_${m[0]}_min`).value), parseFloat(document.getElementById(`l_${m[0]}_max`).value) ];
+            inv[m[1]] = document.getElementById(`inv_${m[0]}`).checked ? -1 : 1;
+        });
+        post('/api/calibration/save', {LIMITS: lims, INVERT: inv}).then(()=>alert("Limits & Inversions Updated"));
+    }
+
+    function loadAnimationsDropdown() {
+        fetch('/api/get_all_anims_categorized').then(r=>r.json()).then(data => {
+            let bi_grp = document.getElementById('drop_built_in');
+            let cu_grp = document.getElementById('drop_custom');
+            bi_grp.innerHTML = data.built_in.map(a => `<option value="${a}">${a}</option>`).join('');
+            cu_grp.innerHTML = data.custom.map(a => `<option value="${a}">${a}</option>`).join('');
+        });
+    }
+
+    function playSelectedDropdown() {
+        let val = document.getElementById('anim_dropdown').value;
+        if(val) post('/api/play_anim', {name: val});
+    }
+
+    function loadDropdownToEditor() {
+        let val = document.getElementById('anim_dropdown').value;
+        if(val) {
+            document.getElementById('anim_name').value = val;
+            post('/api/get_anim', {name: val}).then(r=>r.json()).then(d=>{ 
+                steps = d.steps; 
+                renderSteps();
+            });
+        }
+    }
+
+    function addStep() {
+        steps.push({
+            "Base": parseFloat(document.getElementById('base').value), "X (Sway)": parseFloat(document.getElementById('x').value), 
+            "Y (Surge)": parseFloat(document.getElementById('y').value), "Z (Heave)": parseFloat(document.getElementById('z').value), 
+            "Roll": parseFloat(document.getElementById('roll').value), "Pitch": parseFloat(document.getElementById('pitch').value), 
+            "Yaw": parseFloat(document.getElementById('yaw').value), "Left Eye": parseFloat(document.getElementById('left_eye').value), 
+            "Right Eye": parseFloat(document.getElementById('right_eye').value), 
+            "duration": parseFloat(document.getElementById('step_dur').value), "audio": document.getElementById('step_aud').value
+        });
+        document.getElementById('step_aud').value = ''; 
+        renderSteps();
+    }
+
+    function renderSteps() {
+        document.getElementById('step_list').innerHTML = steps.map((s,i)=>`<li class="list-group-item d-flex justify-content-between align-items-center text-light bg-secondary mb-1 border-0"><span class="small">Step ${i+1}: ${s.duration}s ${s.audio?'🗣️':''}</span><button class="btn btn-sm btn-danger py-0" onclick="steps.splice(${i},1);renderSteps()">X</button></li>`).join('');
+    }
+
+    function saveAnim() {
+        const n = document.getElementById('anim_name').value;
+        const cat = document.getElementById('anim_category').value;
+        if(n && steps.length) {
+            post('/api/save_anim_v6', {name: n, steps: steps, category: cat}).then(() => {
+                alert("Saved Animation Sequence!");
+                loadAnimationsDropdown();
+            });
+        }
+    }
+
+    function deleteAnim() {
+        const n = document.getElementById('anim_name').value;
+        if(confirm("Confirm deletion of this sequence?")) {
+            post('/api/delete_anim', {name: n}).then(() => {
+                alert("Deleted Sequence!");
+                loadAnimationsDropdown();
+                steps = [];
+                renderSteps();
+            });
+        }
+    }
+
+    function renameAnim() {
+        const o = document.getElementById('anim_name').value;
+        const n = prompt("Type the new name for this sequence:");
+        if(n) {
+            post('/api/rename_anim', {old_name: o, new_name: n}).then(() => {
+                loadAnimationsDropdown();
+                document.getElementById('anim_name').value = n;
+            });
+        }
+    }
+
+    function saveSettings() {
+        post('/api/save_config', {
+            piper_model: document.getElementById('piper_model').value, 
+            wake_word: document.getElementById('wake_word').value,
+            ai_url: document.getElementById('ai_url').value, 
+            ai_model: document.getElementById('ai_model').value,
+            system_prompt: document.getElementById('sys_prompt').value,
+            mic_source: document.getElementById('mic_source').value,
+            mic_volume: parseInt(document.getElementById('mic_volume').value),
+            speaker_volume: parseFloat(document.getElementById('speaker_volume').value)
+        });
+    }
+
+    function toggleApp(app) {
+        post('/api/toggle_app', {app_name: app}).then(r=>r.json()).then(d => {
+            let btn = document.getElementById('app_'+app);
+            if(d.running) { btn.classList.remove('btn-outline-light'); btn.classList.add('btn-success'); }
+            else { btn.classList.remove('btn-success'); btn.classList.add('btn-outline-light'); }
+        });
+    }
+
+    function toggleVid() { post('/api/video', {state: !vidState}); vidState = !vidState; }
+    function toggleBlink() { blinkState = !blinkState; document.getElementById('blinkBtn').innerText = blinkState ? "👁️ Blink ON" : "😑 Blink OFF"; post('/api/toggle_blink', {state: blinkState}); }
+    
+    function sendChat(txt) {
+        if(!txt) return;
+        document.getElementById('chatStatus').innerText = "Waiting on AI Response...";
+        post('/api/chat', {prompt: txt}).then(r=>r.json()).then(d => {
+            document.getElementById('chatReply').innerText = d.reply;
+            document.getElementById('chatStatus').innerText = "Ready";
+        });
+    }
+
+    function forceListen() {
+        document.getElementById('chatStatus').innerText = "Listening to Mic... Speak now!";
+        post('/api/force_listen', {}).then(r => r.json()).then(() => {
+            setTimeout(() => { document.getElementById('chatStatus').innerText = "Ready"; }, 6000);
+        });
+    }
+
+    function post(url, body) { return fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)}); }
+
+    setInterval(() => {
+        if (!isDragging) {
+            fetch('/api/state').then(r=>r.json()).then(data => {
+                for (const key in data) {
+                    if (document.getElementById(key) && key !== 'both_eyes' && key !== 'conversation_active') {
+                        document.getElementById(key).value = data[key];
+                        if(document.getElementById('v_'+key)) document.getElementById('v_'+key).innerText = Math.round(data[key]);
+                    }
+                }
+                
+                let btn = document.getElementById('mic_glow_button');
+                let title = document.getElementById('session_title');
+                let desc = document.getElementById('session_desc');
+                
+                if (data.conversation_active) {
+                    btn.classList.remove('btn-danger');
+                    btn.classList.add('btn-success');
+                    btn.style.boxShadow = "0 0 15px #198754";
+                    title.innerText = "Continuous Voice Active";
+                    title.className = "text-success fw-bold";
+                    desc.innerText = "The robot is listening... Speak freely without using the wake word!";
+                } else {
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-danger');
+                    btn.style.boxShadow = "none";
+                    title.innerText = "Hands-Free AI Ready";
+                    title.className = "text-light";
+                    desc.innerText = 'Say "' + document.getElementById('wake_word').value.split(',')[0] + '" near the Mic, or click to talk.';
+                }
+            }).catch(()=>{});
+        }
+    }, 400);
+
+    document.querySelectorAll('.p-slider').forEach(s => {
+        s.addEventListener('mousedown', () => isDragging = true); s.addEventListener('touchstart', () => isDragging = true);
+        s.addEventListener('mouseup', () => isDragging = false); s.addEventListener('touchend', () => isDragging = false);
+        s.addEventListener('input', e => {
+            if(e.target.id === 'both_eyes') {
+                let val = parseInt(e.target.value);
+                document.getElementById('left_eye').value = val; document.getElementById('right_eye').value = val + 25; 
+                document.getElementById('v_both_eyes').innerText = val;
+                document.getElementById('v_left_eye').innerText = val;
+                document.getElementById('v_right_eye').innerText = val + 25;
+            } else if (document.getElementById('v_'+e.target.id)) document.getElementById('v_'+e.target.id).innerText = e.target.value;
+
+            post('/api/move', { 
+                base: parseFloat(document.getElementById('base').value), x: parseFloat(document.getElementById('x').value), 
+                y: parseFloat(document.getElementById('y').value), z: parseFloat(document.getElementById('z').value), 
+                roll: parseFloat(document.getElementById('roll').value), pitch: parseFloat(document.getElementById('pitch').value), 
+                yaw: parseFloat(document.getElementById('yaw').value), left_eye: parseFloat(document.getElementById('left_eye').value), 
+                right_eye: parseFloat(document.getElementById('right_eye').value) 
+            });
+        });
+    });
+
+    loadAnimationsDropdown();
+</script>
+</body>
+</html>
