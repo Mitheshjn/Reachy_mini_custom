@@ -83,7 +83,7 @@ To handle live audio and video streaming, some core system utilities must be ava
 
 ---
 
-## 🔌 3. Raspberry Pi (Slave Robot) Setup
+## 3. Raspberry Pi (Slave Robot) Setup
 
 The Raspberry Pi interacts directly with the UART serial bus servos and I2S audio hardware.
 
@@ -93,7 +93,7 @@ The Raspberry Pi interacts directly with the UART serial bus servos and I2S audi
    ./run.sh
    ```
 
-## 📦 Reference: `pyproject.toml`
+## Reference: `pyproject.toml`
 
 For your reference, the included `pyproject.toml` specifies the lock-step dependencies used in v6:
 
