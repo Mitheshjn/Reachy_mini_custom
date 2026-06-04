@@ -92,6 +92,27 @@ The Raspberry Pi interacts directly with the UART serial bus servos and I2S audi
    ```bash
    ./run.sh
    ```
+## Connecting to the bot: 
+
+By default when you connect power to the bot it will look for Known wifi devices. If there is no wifi then then it will start its own hotspot with the SSID as reachy mini and the password will be 12345678, you can connect to it and enter the new wifi details. If in any case the bot does not show any hotspot then you 2 options:
+
+Option 1: Use mobile hotspot to connect with the bot. Rename the ssid as " moto e13 " and password as 12345678. This will make bot to connect to your mobile hotspot. Then use any tools/apps like fing (for phone) or ip scanner (for laptop) to get the ip of the robot. Then you need to ssh into the bot, it can be done using terminal / putty etc. In the terminal type 
+```
+ssh pi-zero@192.168.29.129
+```
+Here change the ip address according to your robot. Then it will ask for password which is 1234 . Note this is also the password for sudo. Once you logged in type ,
+```
+cd pi_code_v5
+./run.sh
+```
+This will execute the script in the pi which will accecpt connection from your devices and will stream audio and video to it.
+Run the server.py in the pc and open the localhost webpage, in the top right you have the option to enter the ip address of the bot, type the IP address and if connected successfully the robot should come alive. 
+
+If in case the robot is not properly calibrated and is a little off after boot then go to Fleet calibration sub tab in the webapp, and it show some default values in the slider, adjust each individually till its ok , or just click on save and go to the calibration folder in the pc project folder and there will be multiple files with ip address and UUID names. Copy the files save them seperately. Choose a file Copy all the contents in the json file and put it in all the other files. Then restart the server and check. IF it worked then great, if not then use the file content from the other json file and do it again.
+
+For AI chat bot to work, use ollama to run qwen 2 1.5b model locally, if you are using custom ollama port or different model apart from 11434 and qwen 2:1.5b, then in the webapp setting tab change the API url and the model name and you are good to go.
+
+Once the Robot is calibrated, you are done!
 
 ## Reference: `pyproject.toml`
 
@@ -99,18 +120,22 @@ For your reference, the included `pyproject.toml` specifies the lock-step depend
 
 ```toml
 [project]
-name = "reachy-mini-os-v6"
+name = "reachy-mini-custom"
 version = "6.0.0"
 description = "Fleet-ready Master/Slave OS for Reachy Mini v6"
+readme = "README.md"
+requires-python = "==3.11.14"
+
 dependencies = [
-    "flask>=3.0.0",
-    "flask-sock>=2.0.0",
-    "numpy>=1.24.0",
-    "opencv-python>=4.8.0",
-    "mediapipe>=0.10.0",
-    "faster-whisper>=0.10.0",
-    "pyaudio>=0.2.13",
-    "cryptography>=41.0.0",
-    "pyOpenSSL>=23.2.0"
+    "faster-whisper==1.2.1",
+    "flask-sock==0.7.0",
+    "mediapipe==0.10.11",
+    "opencv-python==4.13.0.92",
+    "piper-tts==1.4.1",
+    "pyaudio==0.2.14",
+    "pyopenssl==26.0.0",
+    "speechrecognition==3.16.0",
+    "vosk==0.3.45",
+    "webrtcvad==2.0.10"
 ]
 ```
